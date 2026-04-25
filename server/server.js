@@ -1,16 +1,18 @@
 const express = require('express')
+const cors = require('cors')
+require('dotenv').config()
+const mongoose = require('mongoose')
+
 const app = express()
-app.listen(3000)
 
-const userRouter = require('./routes/userRoutes');
-const connectMongoDB = require('./connectMongo')
+app.use(cors())
+app.use(express.json())
 
-connectMongoDB('mongodb://127.0.0.1:27017/movie-puzzler')
+const authRouter = require('./routes/authRoutes')
+app.use('/api/auth', authRouter)
 
-app.use(express.json());
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('MongoDB Connected'))
+  .catch((err) => console.log('MongoDB Connection Error', err))
 
-app.get('/', (req,res) =>{
-    res.send("Hello world")
-})
-
-app.use("/users", userRouter)
+app.listen(3000, () => console.log('Server running on port 3000'))
