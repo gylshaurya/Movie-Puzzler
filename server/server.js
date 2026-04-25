@@ -8,6 +8,9 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
+const puzzleRouter = require('./routes/puzzleRoutes')
+app.use('/api/puzzles', puzzleRouter)
+
 const authRouter = require('./routes/authRoutes')
 app.use('/api/auth', authRouter)
 
